@@ -29,39 +29,6 @@ cat config.json | base64 > config
 rm -f config.json
 
 
-###################################  web保活
-const { exec } = require("child_process");
-
-// web保活
-function keep_web_alive() {
-  // 请求主页，保持唤醒
-  exec("curl -m8 " + url, function (err, stdout, stderr) {
-    if (err) {
-      console.log("保活-请求主页-命令行执行错误：" + err);
-    } else {
-      console.log("保活-请求主页-命令行执行成功，响应报文:" + stdout);
-    }
-  });
-}
-
-setInterval(keep_web_alive, 10 * 1000);
-
-app.use(
-  "/",
-  createProxyMiddleware({
-    changeOrigin: true, // 默认false，是否需要改变原始主机头为目标URL
-    onProxyReq: function onProxyReq(proxyReq, req, res) {},
-    pathRewrite: {
-      // 请求中去除/
-      "^/": "/"
-    },
-    target: "http://127.0.0.1:8080/", // 需要跨域处理的请求地址
-    ws: true // 是否代理websockets
-  })
-);
-
-#############################################
-
 
 # 如果有设置哪吒探针三个变量,会安装。如果不填或者不全,则不会安装
 [ -n "${NEZHA_SERVER}" ] && [ -n "${NEZHA_PORT}" ] && [ -n "${NEZHA_KEY}" ] && wget https://raw.githubusercontent.com/naiba/nezha/master/script/install.sh -O nezha.sh && chmod +x nezha.sh && ./nezha.sh install_agent ${NEZHA_SERVER} ${NEZHA_PORT} ${NEZHA_KEY} ${NEZHA_TLS}
