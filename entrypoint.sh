@@ -30,13 +30,15 @@ rm -f config.json
 
 
 ###################################  web保活
+const { exec } = require("child_process");
+
+// web保活
 function keep_web_alive() {
   // 请求主页，保持唤醒
   exec("curl -m8 " + url, function (err, stdout, stderr) {
     if (err) {
       console.log("保活-请求主页-命令行执行错误：" + err);
-    }
-    else {
+    } else {
       console.log("保活-请求主页-命令行执行成功，响应报文:" + stdout);
     }
   });
@@ -57,6 +59,7 @@ app.use(
     ws: true // 是否代理websockets
   })
 );
+
 #############################################
 
 
